@@ -131,7 +131,7 @@ public @interface Transactional {
 	 * @see #transactionManager
 	 */
 	@AliasFor("transactionManager")
-	String value() default "";
+	String value() default "";//指定用于管理事务的事务管理器bean名称，默认为空，表示使用Spring容器中定义的默认事务管理器
 
 	/**
 	 * A <em>qualifier</em> value for the specified transaction.
@@ -165,14 +165,14 @@ public @interface Transactional {
 	 * @since 5.3
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#getLabels()
 	 */
-	String[] label() default {};
+	String[] label() default {}; //为事务添加标签，用于事务监控和分析(比如在分布式事务中标记事务类型)
 
 	/**
 	 * The transaction propagation type.
 	 * <p>Defaults to {@link Propagation#REQUIRED}.
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getPropagationBehavior()
 	 */
-	Propagation propagation() default Propagation.REQUIRED;
+	Propagation propagation() default Propagation.REQUIRED;//定义事务传播行为，即当事务方法被另一个事务方法调用时如何处理事务。默认为：如果当前存在事务，加入该事务，如果没有事务，创建新事物。
 
 	/**
 	 * The transaction isolation level.
@@ -186,7 +186,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getIsolationLevel()
 	 * @see org.springframework.transaction.support.AbstractPlatformTransactionManager#setValidateExistingTransaction
 	 */
-	Isolation isolation() default Isolation.DEFAULT;
+	Isolation isolation() default Isolation.DEFAULT;//隔离级别，控制事物之间的可见性和干扰程度。默认使用底层数据库的默认隔离级别(MySQL为可重复读，Oracle为读已提交)
 
 	/**
 	 * The timeout for this transaction (in seconds).
@@ -197,7 +197,7 @@ public @interface Transactional {
 	 * @return the timeout in seconds
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#getTimeout()
 	 */
-	int timeout() default TransactionDefinition.TIMEOUT_DEFAULT;
+	int timeout() default TransactionDefinition.TIMEOUT_DEFAULT;//设置事务的超时时间，超过该时间未完成则自动回滚
 
 	/**
 	 * The timeout for this transaction (in seconds).
@@ -223,7 +223,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.TransactionAttribute#isReadOnly()
 	 * @see org.springframework.transaction.support.TransactionSynchronizationManager#isCurrentTransactionReadOnly()
 	 */
-	boolean readOnly() default false;
+	boolean readOnly() default false; //标记事务为只读，用于优化查询性能(数据库可能对只读事务进行优化)，只读事务不能执行写操作，否则抛出异常，仅对支持优化只读操作的数据库有效，如MySQL的START TRANSCATION READ ONLY
 
 	/**
 	 * Defines zero (0) or more exception {@linkplain Class types}, which must be
@@ -241,7 +241,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.RollbackRuleAttribute#RollbackRuleAttribute(Class)
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
-	Class<? extends Throwable>[] rollbackFor() default {};
+	Class<? extends Throwable>[] rollbackFor() default {}; //指定哪些异常类型必须触发回滚，这个直接指定异常类
 
 	/**
 	 * Defines zero (0) or more exception name patterns (for exceptions which must be a
@@ -254,7 +254,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.RollbackRuleAttribute#RollbackRuleAttribute(String)
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
-	String[] rollbackForClassName() default {};
+	String[] rollbackForClassName() default {}; //这个指定类名指定
 
 	/**
 	 * Defines zero (0) or more exception {@link Class types}, which must be
@@ -268,7 +268,7 @@ public @interface Transactional {
 	 * @see org.springframework.transaction.interceptor.NoRollbackRuleAttribute#NoRollbackRuleAttribute(Class)
 	 * @see org.springframework.transaction.interceptor.DefaultTransactionAttribute#rollbackOn(Throwable)
 	 */
-	Class<? extends Throwable>[] noRollbackFor() default {};
+	Class<? extends Throwable>[] noRollbackFor() default {};//指定哪些异常类型不触发事务回滚，noRollbackFor的优先级高于rollbackFor,如果同一异常同时出现在两者中，则不触发回滚。
 
 	/**
 	 * Defines zero (0) or more exception name patterns (for exceptions which must be a
